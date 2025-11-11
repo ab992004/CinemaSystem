@@ -1,0 +1,59 @@
+﻿@model Movie
+
+@{
+    ViewData["Title"] = "Movie Details";
+}
+
+<h2 class="text-center mb-4">@Model.Title</h2>
+
+<div class="card shadow-lg p-3 mb-5 bg-white rounded" style="max-width: 700px; margin: auto; overflow: hidden;">
+
+    <img src="~/images/movie_images/@Model.MainImg"
+         alt="@Model.Title"
+         class="card-img-top"
+         style="height: 400px; width: 100%; object-fit: contain; border-radius: 2px;" />
+
+
+    <div class="card-body">
+        <h4 class="card-title">@Model.Title</h4>
+        <p class="card-text text-muted">@Model.Description</p>
+
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Price:</strong> @Model.Price $</li>
+            <li class="list-group-item"><strong>Status:</strong> @(Model.Status ? "Available" : "Not Available")</li>
+            <li class="list-group-item"><strong>Show Time:</strong> @Model.DateTime.ToString("dddd, dd MMM yyyy hh:mm tt")</li>
+            <li class="list-group-item"><strong>Category:</strong> @Model.Category?.Name</li>
+        </ul>
+
+        @if (Model.SubImages != null && Model.SubImages.Any())
+        {
+            <div class="mt-4">
+                <h5>More Images</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var img in Model.SubImages)
+                    {
+                        <img src="~/images/movie_images/sub_images/@img.Img"
+                             alt="Sub Image"
+                             style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px;" />
+                    }
+                </div>
+            </div>
+        }
+
+        @if (Model.MovieActors != null && Model.MovieActors.Any())
+        {
+            <div class="mt-4">
+                <h5>Actors</h5>
+                <ul class="list-group">
+                    @foreach (var ma in Model.MovieActors)
+                    {
+                        <li class="list-group-item"> <img src="~/images/Actor_images/@ma.Actor.Img" style="height: 40px; width: auto; border-radius: 6px;margin-right: 20px;" /> @ma.Actor.Name</li>
+                    }
+                </ul>
+            </div>
+        }
+        <div class="mt-4 text-center">
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>

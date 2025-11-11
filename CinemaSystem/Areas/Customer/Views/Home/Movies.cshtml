@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Movie>
+
+<div id="tableExample2">
+    <div class="table-responsive scrollbar">
+        <!-- Filter Section -->
+        <section class="py-3 filter-bar">
+            <div class="container">
+                <div class="row" style="background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;">
+                    <div class="col-12">
+                        <form>
+                            <div class="row">
+                                <!-- Product Name -->
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control" placeholder="Product Name" name="CinemaName" value="@ViewBag.CinemaName">
+                                </div>
+                            </div>
+                            <!-- Submit Button -->
+                            <div class="row mt-3">
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-dark w-100">Filter</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <table class="table table-bordered table-striped fs-10 mb-0">
+            <thead class="bg-200">
+                <tr>
+                    <th class="text-900 sort">Name</th>
+                    <th class="text-900 sort">Location</th>
+                    <th class="text-900 sort">Movies</th>
+                </tr>
+            </thead>
+            <tbody class="list">
+                @foreach (var movie in Model)
+                {
+                    <tr>
+                        <td>@movie.Title</td>
+                        <td>@movie.Description</td>
+                        <td>
+                            <a href="/Customer/Home/Movies/Details/@movie.Id">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+        <button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+        <ul class="pagination mb-0"></ul>
+        <button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" data-list-pagination="next"><span class="fas fa-chevron-right"></span></button>
+    </div>
+</div>
