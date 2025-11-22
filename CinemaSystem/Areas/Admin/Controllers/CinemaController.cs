@@ -1,21 +1,21 @@
 ﻿using CinemaSystem.Data;
 using CinemaSystem.Models;
+using CinemaSystem.Repositories.IRepositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 namespace CinemaSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class CinemaController : Controller
     {
-        private readonly AppDbContext _context;
-        public CinemaController(AppDbContext context)
+        private readonly IRepository<Cinema> _context;
+        public CinemaController(IRepository<Cinema> context)
         {
             _context = context;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var Cinemas = _context.Cinemas.AsNoTracking().AsEnumerable();
+            var Cinemas = await _context.GetAsync(tracked: false);
             return View(Cinemas);
         }
         public IActionResult Create()
@@ -23,23 +23,21 @@ namespace CinemaSystem.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Cinema Cinema)
+        public async Task<IActionResult> Create(Cinema Cinema)
         {
             if (!ModelState.IsValid)
                 return View(Cinema);
 
-            _context.Cinemas.Add(Cinema);
-            _context.SaveChanges();
-
+            await _context.CreateAsync(Cinema);
+            await _context.CommitAsync();
             TempData["success-notification"] = "Add Cinema Successfully";
 
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task <IActionResult> Edit(int id)
         {
-            var Cinema = _context.Cinemas.FirstOrDefault(e => e.Id == id);
-
+            var Cinema = await _context.GetOneAsync(e => e.Id == id, tracked: true);
             if (Cinema is null)
                 return NotFound();
 
@@ -47,29 +45,27 @@ namespace CinemaSystem.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Cinema Cinema)
+        public async Task<IActionResult> Edit(Cinema Cinema)
         {
             if (!ModelState.IsValid)
                 return View(Cinema);
 
-            _context.Cinemas.Update(Cinema);
-            _context.SaveChanges();
-
+            _context.Update(Cinema);
+            await _context.CommitAsync();
             TempData["success-notification"] = "Update Cinema Successfully";
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var Cinema = _context.Cinemas.FirstOrDefault(e => e.Id == id);
+            var Cinema = await _context.GetOneAsync(e => e.Id == id, tracked: true);
 
             if (Cinema is null)
                 return NotFound();
 
-            _context.Cinemas.Remove(Cinema);
-            _context.SaveChanges();
-
+            _context.Delete(Cinema);
+            await _context.CommitAsync();
             TempData["success-notification"] = "Delete Cinema Successfully";
 
             return RedirectToAction(nameof(Index));
