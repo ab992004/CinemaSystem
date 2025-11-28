@@ -12,6 +12,10 @@ namespace CinemaSystem.Data
         public DbSet<Cinema> Cinemas { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<MovieSubImg> MovieSubImgs { get; set; }
+        public DbSet<ApplicationUserOTP> ApplicationUserOTPs { get; set; }
+        public DbSet<CinemaSystem.ViewModel.RegisterVM> RegisterVM { get; set; } = default!;
+        public DbSet<CinemaSystem.ViewModel.ForgetPasswordVM> ForgetPasswordVM { get; set; } = default!;
+        public DbSet<CinemaSystem.ViewModel.ResetPasswordVM> ResetPasswordVM { get; set; } = default!;
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);

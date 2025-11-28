@@ -1,20 +1,23 @@
 ﻿using CinemaSystem.Data;
-using CinemaSystem.Models;
 using CinemaSystem.Repositories.IRepositories;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
+
 namespace CinemaSystem.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly AppDbContext _context;
-        private readonly DbSet<T> _dbSet;
+        protected AppDbContext _context;// = new();
+        private DbSet<T> _dbSet;
+
         public Repository(AppDbContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();
         }
+
+        // CRUD
         public async Task CreateAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
@@ -49,6 +52,8 @@ namespace CinemaSystem.Repositories
             bool tracked = true)
         {
             var entities = _dbSet.AsQueryable();
+
+            // Add Filter
             if (expression is not null)
                 entities = entities.Where(expression);
 
@@ -58,6 +63,8 @@ namespace CinemaSystem.Repositories
 
             if (!tracked)
                 entities = entities.AsNoTracking();
+
+            //entities = entities.Where(e => e.Status);
 
             return await entities.ToListAsync();
         }

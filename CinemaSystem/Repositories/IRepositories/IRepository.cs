@@ -1,5 +1,4 @@
-﻿using CinemaSystem.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace CinemaSystem.Repositories.IRepositories
